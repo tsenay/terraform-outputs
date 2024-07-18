@@ -4,16 +4,31 @@ set -o pipefail
 
 _hcledit=$(which hcledit)
 
+# Parameters
+# - name
+# - value
+# - description 
+function dump_output() {
+    cat <<-EOT
+
+output "$1" {
+  description = "$3"
+  value       = $2
+}
+EOT
+}
+
+
 for tf_file in $(ls *.tf); do
     cat $tf_file | $_hcledit block list | while read line; do
         block_type="${line%%.*}"
         line="${line#*.}"
         case $block_type in
-            locals|output|variable|data) continue; break ;;
+            locals|output|variable|data|provider|terraform) continue; break ;;
             module)
-                output_name=$line 
-                output_description="Module '$output_name' attributes"
-                output_value="$block_type.$output_name"
+                output_name="module_${line}"
+                output_description="Module '$line' attributes"
+                output_value="$block_type.$line"
                 ;;
             resource)
                 label_kind="${line%.*}"
@@ -23,13 +38,6 @@ for tf_file in $(ls *.tf); do
                 output_value="$label_kind.$label_name"
                 ;;
         esac
-        
-        cat <<-EOT
-
-output "$output_name" {
-  description = "$output_description"
-  value       = $output_value
-}
-EOT
+        dump_output "${output_name}" "${output_value}" "${output_description}"
     done
 done

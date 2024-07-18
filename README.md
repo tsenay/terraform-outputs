@@ -1,22 +1,16 @@
 # terraform-outputs
-Generate output from existing resources and modules
+
+Generate terraform output statements from existing resources and modules of current directory
 
 > Works on Linux/MacOS
 
 ## requirements
 
-- This script require [hcledit](https://github.com/minamijoyo/hcledit) to work
+- This script require [hcledit](https://github.com/minamijoyo/hcledit) to parse terraform files
 
-## Installation
-
-```bash
-curl -o /usr/local/bin/terraform-outputs https://raw.githubusercontent.com/tsenay/terraform-outputs/main/terraform-outputs.sh 
-chmod +x /usr/local/bin/terraform-outputs
-```
 
 ## Usage
 
 ```bash
-cd path/to/terraform/module
-terraform-outputs > outputs.tf
+curl -sSL https://raw.githubusercontent.com/tsenay/terraform-outputs/main/terraform-outputs.sh | bash > outputs.tf
 ```
