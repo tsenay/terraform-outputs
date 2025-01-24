@@ -23,21 +23,19 @@ for tf_file in $(ls *.tf); do
         block_type="${line%%.*}"
         line="${line#*.}"
         case $block_type in
-        locals | output | variable | data | provider | terraform | check | move | import | assert)
-            continue
-            ;;
-        module)
+          module)
             output_name="module_${line}"
             output_description="Module '$line' attributes"
             output_value="$block_type.$line"
             ;;
-        resource)
+          resource)
             label_kind="${line%.*}"
             label_name="${line#*.}"
             output_name="${label_kind}_${label_name//[\-]/_}"
             output_description="Resource '$label_kind.$label_name' attributes"
             output_value="$label_kind.$label_name"
             ;;
+          *) continue ;; 
         esac
         dump_output "${output_name}" "${output_value}" "${output_description}"
     done
