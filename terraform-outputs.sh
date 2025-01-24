@@ -23,7 +23,7 @@ for tf_file in $(ls *.tf); do
         block_type="${line%%.*}"
         line="${line#*.}"
         case $block_type in
-        locals | output | variable | data | provider | terraform)
+        locals | output | variable | data | provider | terraform | check | move | import | assert)
             continue
             ;;
         module)
